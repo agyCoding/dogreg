@@ -13,6 +13,10 @@ public class UserManager {
         users = new ArrayList<>();
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
     public static synchronized UserManager getInstance() {
         if (instance == null) {
             instance = new UserManager();
