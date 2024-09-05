@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 /**
  * JavaFX App
@@ -23,12 +24,17 @@ public class App extends Application {
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        URL fxmlLocation = App.class.getResource(fxml + ".fxml");
+        if (fxmlLocation == null) {
+            throw new IOException("FXML file not found: " + fxml + ".fxml");
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
         return fxmlLoader.load();
     }
 

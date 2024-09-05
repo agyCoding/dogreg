@@ -1,5 +1,9 @@
-doggenregistry\SecondaryController.class
-module-info.class
-doggenregistry\LoginController.class
+doggenregistry\models\User.class
+doggenregistry\controllers\SecondaryController.class
+doggenregistry\utils\PasswordUtils.class
 doggenregistry\App.class
-doggenregistry\PrimaryController.class
+doggenregistry\controllers\PrimaryController.class
+module-info.class
+doggenregistry\controllers\RegisterUserController.class
+doggenregistry\services\UserManager.class
+doggenregistry\controllers\LoginController.class

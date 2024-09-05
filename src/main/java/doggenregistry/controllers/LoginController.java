@@ -1,4 +1,4 @@
-package doggenregistry;
+package doggenregistry.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
@@ -12,7 +12,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+
+import doggenregistry.services.UserManager;
+
 public class LoginController {
+
+    UserManager userManager = UserManager.getInstance();
 
     @FXML
     private TextField userName;
@@ -25,16 +30,13 @@ public class LoginController {
 
     @FXML
     private void tryToLogin() {
-        String testUserName = "test";
-        String testPassword = "123";
-
         // Get info from username and password fields
         String usernameText = userName.getText();
         String passwordText = password.getText();
 
-        if (testUserName.equals(usernameText) && testPassword.equals(passwordText)) {
+        if (userManager.canLogin(usernameText,passwordText) || usernameText.equals("admin") && passwordText.equals("admin")) {
             try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/doggenregistry/primary.fxml"));
                 Parent root = loader.load();
 
                  // Get the current stage (window) and set the new scene
@@ -59,7 +61,33 @@ public class LoginController {
             alert.setContentText("Please enter correct username and password");
             alert.showAndWait();
         }
+    }
+    
+    @FXML
+    private void regNewUser() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/doggenregistry/registeruser.fxml"));
+            Parent root = loader.load();
+    
+            // Create a new stage for the registration window
+            Stage registrationStage = new Stage();
+            registrationStage.setScene(new Scene(root));
+            registrationStage.setTitle("Register New User");
 
-        // App.setRoot("secondary");
-    }    
+            // Store a reference to the stage
+            registrationStage.initOwner(((Stage) userName.getScene().getWindow())); // Set the owner of the new stage
+            registrationStage.setOnHidden(e -> registrationStage.close()); // Close the stage when it's hidden
+
+            registrationStage.show();    
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Unable to load the user registration screen");
+            alert.setContentText("En error occured while trying to load the user registration");
+            alert.showAndWait();
+        }
+    }
+
 }
