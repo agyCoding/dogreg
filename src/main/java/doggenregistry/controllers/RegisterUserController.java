@@ -1,18 +1,15 @@
 package doggenregistry.controllers;
 
 import doggenregistry.services.UserManager;
-import doggenregistry.services.DatabaseManager;
+import doggenregistry.models.User;
+import doggenregistry.utils.PasswordUtils;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class RegisterUserController {
 
@@ -45,7 +42,10 @@ public class RegisterUserController {
                 showAlert(AlertType.ERROR, "Registration Failed", "Username already taken", "Please choose a different username");
                 return;
             }
-            userManager.registerUser(usernameText, passwordText);
+            // If everything's ok, create new user object and register it
+            User newUser = new User(usernameText, PasswordUtils.hashPassword(passwordText));
+            userManager.registerUser(newUser);
+            
             // Show a success message and switch the screen to login
     
             showAlert(AlertType.INFORMATION, "Registration Successful", "User Registered", "You have successfully registered! Please log in to open the main app");
