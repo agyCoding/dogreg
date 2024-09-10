@@ -2,6 +2,7 @@ doggenregistry\models\User.class
 doggenregistry\controllers\SecondaryController.class
 doggenregistry\utils\PasswordUtils.class
 doggenregistry\App.class
+doggenregistry\services\DatabaseManager.class
 doggenregistry\controllers\PrimaryController.class
 module-info.class
 doggenregistry\controllers\RegisterUserController.class
