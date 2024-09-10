@@ -13,7 +13,6 @@ public class UserManager {
 
     private static UserManager instance;
 
-    
     private UserManager() {   }
 
     public static synchronized UserManager getInstance() {
@@ -43,25 +42,28 @@ public class UserManager {
 
         return false;  // Return false if there's any error or no username found
     }
-    
-    // Register a new user
-    public void registerUser(String userName, String password) {
-        String hashedPassword = PasswordUtils.hashPassword(password);
 
-        String query = "INSERT INTO users (userName, hashedPassword) VALUES (?, ?)";
+    // New method to register a user (object based)
+    public void registerUser(User user) {
+        // Ensure user object is not null
+        if (user == null) {
+            throw new IllegalArgumentException("User cannot be null");
+        }
+
+        String query = "INSERT INTO users (userName, email, hashedPassword) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseManager.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(query)) {
+             PreparedStatement stmt = conn.prepareStatement(query)) {
 
-            stmt.setString(1, userName);
-            stmt.setString(2, hashedPassword);
+            stmt.setString(1, user.getUserName());
+            stmt.setString(2, user.getEmail());
+            stmt.setString(3, user.getPasswordHash());
 
             stmt.executeUpdate();
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     // Check if the user can login
