@@ -21,6 +21,10 @@ public class User {
         this.passwordHash = passwordHash;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public String getUserName() {
         return userName;
     }
