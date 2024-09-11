@@ -8,17 +8,17 @@ public class Dog {
     // is the dog female?
     private boolean isFemale;
     private LocalDate registrationDate;
-    private String ownerName;
+    private int ownerID;
     // does the dog have Degen Myelopathy?
     private boolean hasDM;
 
-    public Dog(String name, String breed, LocalDate birthDate, boolean isFemale, String ownerName) {
+    public Dog(String name, String breed, LocalDate birthDate, boolean isFemale, int ownerID) {
         this.name = name;
         this.breed = breed;
         this.birthDate = birthDate;
         this.isFemale = isFemale;
         this.registrationDate = LocalDate.now();
-        this.ownerName = ownerName;
+        this.ownerID = ownerID;
     }
 
     public String getName() {
@@ -61,12 +61,12 @@ public class Dog {
         this.registrationDate = registrationDate;
     }
 
-    public String getOwnerName() {
-        return ownerName;
+    public int getOwnerID() {
+        return ownerID;
     }
 
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
+    public void setOwnerID(int ownerID) {
+        this.ownerID = ownerID;
     }
 
     public boolean hasDM() {
