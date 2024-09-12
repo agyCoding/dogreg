@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import java.io.IOException;
 
 public class PrimaryController {
 
@@ -28,6 +29,18 @@ public class PrimaryController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/doggenregistry/registerdog.fxml"));
                 Parent root = loader.load();
 
+                // Create a new stage for the registration window
+                Stage registrationStage = new Stage();
+                registrationStage.setScene(new Scene(root));
+                registrationStage.setTitle("Register New Dog");
+
+                // Store a reference to the stage
+                registrationStage.initOwner(((Stage) userLabel.getScene().getWindow())); // Set the owner of the new stage
+                registrationStage.setOnHidden(e -> registrationStage.close()); // Close the stage when it's hidden
+
+                registrationStage.show();   
+
+                /*
                 // Get the controller of the next scene
                 RegisterDogController registerDogController = loader.getController();
 
@@ -36,7 +49,9 @@ public class PrimaryController {
                  // Get the current stage (window) and set the new scene
                  Stage stage = (Stage) userLabel.getScene().getWindow();
                  stage.setScene(new Scene(root));
-                 stage.show();              
+                 stage.show();
+                 */
+              
             } catch (IOException e) {
                 e.printStackTrace();
 

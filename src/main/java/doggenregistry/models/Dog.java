@@ -3,6 +3,7 @@ import java.time.LocalDate;
 
 public class Dog {
     private String name;
+    private int breedID;
     private String breed;
     private LocalDate birthDate;
     // is the dog female?
