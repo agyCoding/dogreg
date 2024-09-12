@@ -13,7 +13,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
+import java.time.LocalDate;
 
 public class DogManager {
     private static DogManager instance;
@@ -27,6 +30,33 @@ public class DogManager {
             instance = new DogManager();
         }
         return instance;
+    }
+
+    // Method to fetch dogs for a specific user
+    public List<Dog> fetchDogsForUser(int userID) {
+        List<Dog> dogs = new ArrayList<>();
+        String query = "SELECT * FROM dogs WHERE owner_id = ?";
+
+        try (Connection connection = DatabaseManager.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, userID);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                String name = rs.getString("name");
+                String breed = rs.getString("breed_id");
+                LocalDate birthDate = rs.getDate("birth_date").toLocalDate();
+                boolean isFemale = rs.getBoolean("is_female");
+
+                // Create a new Dog object
+                Dog dog = new Dog(name, breed, birthDate, isFemale, userID);
+                dogs.add(dog);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dogs;
     }
 
     // Populating the sex choice box with hardcoded values
@@ -70,7 +100,7 @@ public class DogManager {
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, dog.getName());
-            
+
             // Get breed ID from breed name
             Integer breedID = getBreedIdByName(dog.getBreed());
             if (breedID == null) {
