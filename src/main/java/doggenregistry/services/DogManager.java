@@ -122,4 +122,23 @@ public class DogManager {
         }
     }
 
+    public void updateDog(Dog dog) {
+        String query = "UPDATE dogs SET name, breed_id, birth_date) VALUES (?, ?, ? WHERE id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, dog.getName());
+            stmt.setInt(2, getBreedIdByName(dog.getBreed()));
+            stmt.setDate(3, java.sql.Date.valueOf(dog.getBirthDate()));
+            stmt.setInt(4, dog.getId());
+
+            stmt.executeUpdate();
+
+            GeneralUtils.showAlert(AlertType.INFORMATION, "Dog updated", "Dog updated successfully", "The dog has been updated successfully");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

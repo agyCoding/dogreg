@@ -2,6 +2,7 @@ package doggenregistry.models;
 import java.time.LocalDate;
 
 public class Dog {
+    private int id;
     private String name;
     private int breedID;
     private String breed;
@@ -20,6 +21,10 @@ public class Dog {
         this.isFemale = isFemale;
         this.registrationDate = LocalDate.now();
         this.ownerID = ownerID;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

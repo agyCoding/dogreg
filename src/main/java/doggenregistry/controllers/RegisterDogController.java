@@ -1,14 +1,13 @@
 package doggenregistry.controllers;
 
-import doggenregistry.models.User;
+
 import doggenregistry.models.Dog;
 import doggenregistry.services.DogManager;
 import doggenregistry.services.UserManager;
 import doggenregistry.utils.GeneralUtils;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;

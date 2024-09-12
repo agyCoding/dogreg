@@ -11,7 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
@@ -34,6 +33,9 @@ public class PrimaryController {
 
     private String userName;
 
+    // List to store the dogs
+    private List<Dog> dogs = new ArrayList<>();
+
     public void updateUserLabel(String username) {
         this.userName = username;
         userLabel.setText("Logged in as: " + username);
@@ -47,7 +49,7 @@ public class PrimaryController {
         int userID = UserManager.getInstance().fetchUserIDFromDatabase(userName);
 
         // Fetch dog list for current user
-        List<Dog> dogs = DogManager.getInstance().fetchDogsForUser(userID);
+        dogs = DogManager.getInstance().fetchDogsForUser(userID);
 
         // Create a list of dog names
         ObservableList<String> dogNames = FXCollections.observableArrayList();
@@ -63,11 +65,20 @@ public class PrimaryController {
         // Add event listener for list view item selection
         yourDogsLV.setOnMouseClicked(event -> {
             String selectedDogName = yourDogsLV.getSelectionModel().getSelectedItem();
+
+            // Debugging statement to confirm if the event listener is triggered
+            System.out.println("Item clicked in ListView");
+
             if (selectedDogName != null) {
+                System.out.println("Selected dog: " + selectedDogName); // Debugging statement
                 Dog selectedDog = getSelectedDog(selectedDogName);
                 openEditDogWindow(selectedDog);
+            } else {
+                System.out.println("No dog selected"); // Debugging statement
             }
         });
+
+        yourDogsLV.requestFocus(); // Ensures ListView is focused
     }
 
     // Methos to get the selected dog (object) from the list view
@@ -115,7 +126,7 @@ public class PrimaryController {
             EditDogController editDogController = loader.getController();
 
             // Pass the selected dog to the next scene's controller
-            editDogController.setSelectedDog(selectedDog);
+            editDogController.setDogData(selectedDog);
 
             // Create a new stage (window)
             Stage editStage = new Stage();
