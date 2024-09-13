@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<FlowPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="223.0" prefWidth="297.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="doggenregistry.controllers.EditDogController">
+   <children>
+      <Label text="Edit information about your dog">
+         <font>
+            <Font name="System Bold" size="17.0" />
+         </font>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </Label>
+      <Label text="Name: ">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </Label>
+      <TextField fx:id="dogNameField" prefHeight="25.0" prefWidth="215.0" />
+      <Label text="Birth date:">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </Label>
+      <DatePicker fx:id="dogBirthDatePicker" prefHeight="25.0" prefWidth="197.0" />
+      <Label text="Breed:">
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+      </Label>
+      <ChoiceBox fx:id="breedChoiceBox" prefHeight="25.0" prefWidth="218.0" />
+      <Button fx:id="saveBtn" mnemonicParsing="false" text="Save" onAction="#saveDogChanges">
+         <FlowPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </FlowPane.margin>
+      </Button>
+   </children>
+</FlowPane>
