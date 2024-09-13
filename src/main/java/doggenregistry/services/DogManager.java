@@ -44,13 +44,16 @@ public class DogManager {
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                String name = rs.getString("name");
-                String breed = rs.getString("breed_id");
+                int dogsId = rs.getInt("id");
+                String dogsName = rs.getString("name");
+                int breedID = rs.getInt("breed_id");
                 LocalDate birthDate = rs.getDate("birth_date").toLocalDate();
                 boolean isFemale = rs.getBoolean("is_female");
+                LocalDate registrationDate = rs.getDate("registration_date").toLocalDate();
+                boolean hasDM = rs.getBoolean("has_dm");
 
                 // Create a new Dog object
-                Dog dog = new Dog(name, breed, birthDate, isFemale, userID);
+                Dog dog = new Dog(dogsId, dogsName, breedID, birthDate, isFemale, registrationDate, userID, hasDM);
                 dogs.add(dog);
             }
         } catch (SQLException e) {
@@ -92,7 +95,17 @@ public class DogManager {
         return breedNameToIdMap.get(breedName);
     }
 
-    // register a new dog
+    // Method to get breed name from breed ID
+    public String getBreedNameById(int breedId) {
+    for (Map.Entry<String, Integer> entry : breedNameToIdMap.entrySet()) {
+        if (entry.getValue() == breedId) {
+            return entry.getKey(); // Return the breed name
+        }
+    }
+    return null; // If not found, return null or handle it accordingly
+    }
+
+    // Register a new dog in the database
     public void registerDog(Dog dog) {
         String query = "INSERT INTO dogs (name, breed_id, birth_date, is_female, registration_date, owner_id) VALUES (?, ?, ?, ?, ?, ?)";
 
@@ -102,9 +115,9 @@ public class DogManager {
             stmt.setString(1, dog.getName());
 
             // Get breed ID from breed name
-            Integer breedID = getBreedIdByName(dog.getBreed());
+            Integer breedID = getBreedIdByName(dog.getBreedName());
             if (breedID == null) {
-                throw new SQLException("Breed ID not found for breed: " + dog.getBreed());
+                throw new SQLException("Breed ID not found for breed: " + dog.getBreedName());
             }
             stmt.setInt(2, breedID);  // use breed ID;
 
@@ -122,22 +135,32 @@ public class DogManager {
         }
     }
 
-    public void updateDog(Dog dog) {
-        String query = "UPDATE dogs SET name, breed_id, birth_date) VALUES (?, ?, ? WHERE id = ?";
+    // Update an existing dog in the database
+    public boolean updateDog(Dog dog) {
+        String query = "UPDATE dogs SET name = ?, breed_id = ?, birth_date = ? WHERE id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, dog.getName());
-            stmt.setInt(2, getBreedIdByName(dog.getBreed()));
+            stmt.setInt(2,dog.getBreedID());
             stmt.setDate(3, java.sql.Date.valueOf(dog.getBirthDate()));
             stmt.setInt(4, dog.getId());
+            // Just for debugging
+            System.out.println("Dog's id is: " + dog.getId());
 
-            stmt.executeUpdate();
+            int rowsUpdated = stmt.executeUpdate();
 
-            GeneralUtils.showAlert(AlertType.INFORMATION, "Dog updated", "Dog updated successfully", "The dog has been updated successfully");
+            if (rowsUpdated > 0) {
+                GeneralUtils.showAlert(AlertType.INFORMATION, "Success", "Dog updated", "The dog has been updated successfully.");
+                return true;
+            } else {
+                GeneralUtils.showAlert(AlertType.ERROR, "Error", "Update Failed", "No rows were updated.");
+                return false;
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
 

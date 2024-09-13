@@ -137,6 +137,9 @@ public class PrimaryController {
             editStage.initModality(Modality.WINDOW_MODAL);
             editStage.initOwner(yourDogsLV.getScene().getWindow());
 
+            // Refresh the ListView when the edit stage is closed
+            editStage.setOnHidden(event -> loadUserDogs());
+
             editStage.showAndWait();  // Show and wait until the window is closed       
         } catch (IOException e) {
             e.printStackTrace();

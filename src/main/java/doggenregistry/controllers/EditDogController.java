@@ -6,6 +6,7 @@ import doggenregistry.services.DogManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import javafx.scene.control.ChoiceBox;
 
 import java.time.LocalDate;
@@ -22,6 +23,11 @@ public class EditDogController {
 
     private Dog selectedDog;
 
+    // Method to populate the breed choice box
+    public void initialize() {
+        DogManager.getInstance().populateBreedBox(breedChoiceBox);
+    }
+
     // Method to set the dog data in the fields for editing
     public void setDogData(Dog dog) {
         this.selectedDog = dog;
@@ -29,7 +35,12 @@ public class EditDogController {
         // Fill in the fields with the dog's current data
         dogNameField.setText(dog.getName());
         dogBirthDatePicker.setValue(dog.getBirthDate());
-        breedChoiceBox.setValue(dog.getBreed());
+
+        // Find breed name based on dog's breedID
+        String currentBreed = dog.getBreedName();
+
+        // Set the current breed in the ChoiceBox
+        breedChoiceBox.getSelectionModel().select(currentBreed);
     }
 
     // Method to save the edited dog data
@@ -40,10 +51,20 @@ public class EditDogController {
 
         // Update the dog's data
         selectedDog.setName(updatedName);
-        selectedDog.setBreed(updatedBreed);
+        selectedDog.setBreedName(updatedBreed);
+        // Get the breed ID based on the breed name
+        int updatedBreedId = DogManager.getInstance().getBreedIdByName(updatedBreed);
+        // Set the updated breed ID
+        selectedDog.setBreedID(updatedBreedId);
+
         selectedDog.setBirthDate(updatedBirthDate);
 
-        // Passing the updated data to DogManager to update the database
-        DogManager.getInstance().updateDog(selectedDog);
+        // Passing the updated data to DogManager to update the database and getting a boolean back to see if it updated successfuly or not
+        boolean dogUpdateStatus = DogManager.getInstance().updateDog(selectedDog);
+        if (dogUpdateStatus) {
+            // Close the window
+            Stage stage = (Stage) dogNameField.getScene().getWindow();
+            stage.close();
+        }
     }
 }

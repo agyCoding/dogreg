@@ -1,11 +1,13 @@
 package doggenregistry.models;
 import java.time.LocalDate;
 
+import doggenregistry.services.DogManager;
+
 public class Dog {
     private int id;
     private String name;
     private int breedID;
-    private String breed;
+    private String breedName;
     private LocalDate birthDate;
     // is the dog female?
     private boolean isFemale;
@@ -14,9 +16,25 @@ public class Dog {
     // does the dog have Degen Myelopathy?
     private boolean hasDM;
 
-    public Dog(String name, String breed, LocalDate birthDate, boolean isFemale, int ownerID) {
+    // Constructor for creating a dog from the database (with ID)
+    public Dog(int id, String name, int breedID, LocalDate birthDate, boolean isFemale, LocalDate registrationDate, int ownerID, boolean hasDM) {
+        this.id = id;
         this.name = name;
-        this.breed = breed;
+        this.breedID = breedID;
+        // "Translate" the breed ID to a breed name
+        this.breedName = DogManager.getInstance().getBreedNameById(breedID);
+
+        this.birthDate = birthDate;
+        this.isFemale = isFemale;
+        this.registrationDate = registrationDate;
+        this.ownerID = ownerID;
+        this.hasDM = hasDM;
+    }
+
+    // Constructor for creating a new dog from within the application
+    public Dog(String name, String breedName, LocalDate birthDate, boolean isFemale, int ownerID) {
+        this.name = name;
+        this.breedName = breedName;
         this.birthDate = birthDate;
         this.isFemale = isFemale;
         this.registrationDate = LocalDate.now();
@@ -35,12 +53,25 @@ public class Dog {
         this.name = name;
     }
 
-    public String getBreed() {
-        return breed;
+    public int getBreedID() {
+        return breedID;
     }
 
-    public void setBreed(String breed) {
-        this.breed = breed;
+    public void setBreedID(int breedID) {
+        this.breedID = breedID;
+    }
+
+    public String getBreedName() {
+        // If the dog object is created from the table dogs in the database, it will only have breedId. To populate breedName, we need to fetch it from the hashmap
+        if (breedName == null || breedName.isEmpty()) {
+            // If breedName is not set, fetch it using breedID
+            return DogManager.getInstance().getBreedNameById(breedID);
+        }
+        return breedName;
+    }
+
+    public void setBreedName(String breedName) {
+        this.breedName = breedName;
     }
 
     public LocalDate getBirthDate() {
