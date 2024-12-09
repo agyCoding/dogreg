@@ -39,6 +39,12 @@ public class LoginController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/doggenregistry/primary.fxml"));
                 Parent root = loader.load();
 
+                // Get the controller of the next scene
+                PrimaryController primaryController = loader.getController();
+
+                // Pass the username to the next scene's controller
+                primaryController.updateUserLabel(usernameText);
+
                  // Get the current stage (window) and set the new scene
                  Stage stage = (Stage) userName.getScene().getWindow();
                  stage.setScene(new Scene(root));

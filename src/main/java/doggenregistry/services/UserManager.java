@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.DriverManager;
 
 public class UserManager {
 
@@ -89,4 +88,27 @@ public class UserManager {
         }
 
     }
+    // Fetch userID based on username
+    public int fetchUserIDFromDatabase(String userName) {
+        String query = "SELECT id FROM users WHERE userName = ?";
+
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, userName);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                int userID = rs.getInt("id");
+                return userID;
+            } else {
+                return -1; // if no user is found, return -1
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // if there's an error, return -1
+        }
+    }
+
 }
